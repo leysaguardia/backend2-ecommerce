@@ -6,7 +6,7 @@ import UserDTO from "../dtos/userDto.js";
 import { sendSMS } from "../services/twilioService.js";
 import { sendEmail } from "../services/mailService.js";
 
-// Registro de usuario
+
 export const register = async (req, res) => {
     try {
         const { first_name, last_name, email, phone, password } = req.body;
@@ -20,7 +20,7 @@ export const register = async (req, res) => {
     }
 };
 
-// Login
+
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -37,12 +37,11 @@ export const login = async (req, res) => {
     }
 };
 
-// Endpoint protegido /current
+
 export const current = (req, res) => {
     res.json(new UserDTO(req.user));
 };
 
-// Solicitar recuperación de contraseña
 export const forgotPassword = async (req, res) => {
     try {
         const { email, phone } = req.body;
@@ -51,13 +50,13 @@ export const forgotPassword = async (req, res) => {
 
         const token = crypto.randomBytes(20).toString("hex");
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+        user.resetPasswordExpires = Date.now() + 3600000; 
         await user.save();
 
-        // Enviar correo
+      
         await sendEmail(email, "Recuperar contraseña", `<p>Tu código de recuperación es: ${token}</p>`);
 
-        // Enviar SMS
+       
         await sendSMS(phone, `Tu código de recuperación es: ${token}`);
 
         res.json({ message: "Código de recuperación enviado por email y SMS" });
@@ -66,7 +65,7 @@ export const forgotPassword = async (req, res) => {
     }
 };
 
-// Restablecer contraseña
+
 export const resetPassword = async (req, res) => {
     try {
         const { token } = req.params;
