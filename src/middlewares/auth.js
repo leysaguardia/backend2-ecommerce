@@ -1,4 +1,4 @@
-// ejemplo de middleware
+
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
@@ -12,7 +12,7 @@ export const authMiddleware = async (req, res, next) => {
         const user = await User.findById(decoded.id);
         if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-        req.user = user; // <-- asegurate que `user` tiene first_name, last_name, email, role
+        req.user = user;
         next();
     } catch (err) {
         return res.status(401).json({ message: "Token inválido" });
